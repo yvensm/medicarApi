@@ -8,5 +8,5 @@ class Especialidade(models.Model):
         verbose_name = "Especialidade"
         verbose_name_plural = "Especialidades"
 
-    def __str__:
+    def __str__(self):
         return self.nome
