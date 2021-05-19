@@ -6,4 +6,4 @@ class EspecialidadeSerializer(serializers.ModelSerializer):
     
     class Meta:
         model = Especialidade
-        fields = ('nome',)
+        fields = '__all__'
