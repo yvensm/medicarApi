@@ -1,7 +1,9 @@
-from django.urls import path
+from .views import EspecialidadeViewSet
+from rest_framework import routers
 
-from .views import EspecialidadeAPIView
+router = routers.DefaultRouter()
+router.register(r'', EspecialidadeViewSet)
 
 urlpatterns = [
-    path('', EspecialidadeAPIView.as_view(), name='especialidades')
+
 ]

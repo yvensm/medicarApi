@@ -19,9 +19,10 @@ from django.urls import path, include
 from medicos.urls import router as medicoRouter
 from agenda.urls import router as agendaRouter
 from consultas.urls import router as consultaRouter
+from especialidades.urls import router as especialidadeRouter
 
 urlpatterns = [
-    path('especialidades/', include('especialidades.urls')),
+    path('especialidades/', include(especialidadeRouter.urls)),
     path('medicos/', include('medicos.urls')),
     path('admin/', admin.site.urls),
     path('users/', include('users.urls')),
