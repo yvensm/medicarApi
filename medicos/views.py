@@ -1,4 +1,5 @@
 from functools import reduce
+from globals.pagination import GlobalPagination
 import operator
 from django.db.models.query_utils import Q
 from django_filters.rest_framework import DjangoFilterBackend
@@ -35,7 +36,8 @@ class MedicoViewSet(viewsets.ModelViewSet):
     # search_fields = ['nome']
     # filterset_fields = ['especialidade']
     filter_backends = [MedicoFilter]
-
+    pagination_class = GlobalPagination
+    
     def get_serializer_class(self):
         if(self.action == 'list'):
             return MedicoListSerializer

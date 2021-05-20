@@ -1,5 +1,6 @@
 from datetime import date, datetime, time
 from functools import reduce
+from globals.pagination import GlobalPagination
 from agenda.serializers import AgendaListSerializer, AgendaSerializer
 from django.db.models import Prefetch
 from .models import Horario, Agenda
@@ -49,7 +50,8 @@ class AgendaViewSet(viewsets.ModelViewSet):
     # search_fields = ['medico']
     filterset_fields = []
     filter_backends = [AgendaFilter]
-
+    pagination_class = GlobalPagination
+    
     def get_serializer_class(self):
         if(self.action == 'list'):
             return AgendaListSerializer
