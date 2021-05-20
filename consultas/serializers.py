@@ -9,6 +9,35 @@ from datetime import datetime, date
 from agenda.models import Agenda, Horario
 
 
+
+class ConsultaDestroySerializer(serializers.Serializer):
+
+    def validate(self, data):
+        def validate_user():
+            try:
+                Consulta.objects.get(
+                    usuario=self.context['req'].user, id=self.context['pk'])
+            except ObjectDoesNotExist:
+                raise ValidationError(
+                    {'message': 'Essa consulta não foi marcada por você'})
+        def validade_pk():
+            try:
+                Consulta.objects.get(id=self.context['pk'])
+            except ObjectDoesNotExist:
+                raise ValidationError(
+                    {'message': 'A Consulta não existe'})
+        def validade_hepened():
+            consulta = Consulta.objects.get(id=self.context['pk'])
+            if(consulta.dia<=date.today() and consulta.horario.hora < datetime.now().time()):
+                raise ValidationError(
+                    {'message': 'Não é possivel desmarcar uma consulta que ja aconteceu'})
+
+        validade_pk()
+        validate_user()
+        validade_hepened()
+        return data
+
+
 class ConsultaListSerializer(serializers.ModelSerializer):
     medico = MedicoListSerializer(many=False, read_only=True)
     horario = HorarioListSerializer(many=False, read_only=True)
@@ -29,7 +58,7 @@ class ConsultaStoreSerializer(serializers.Serializer):
                     agenda__id=data['agenda_id'], hora=data['horario'], agendado=False)
             except ObjectDoesNotExist:
                 raise ValidationError(
-                    {'horario': 'Esse horário não está mais disponível'})
+                    {'message': 'Esse horário não está mais disponível'})
 
         def validate_dia(data):
             try:
@@ -39,12 +68,11 @@ class ConsultaStoreSerializer(serializers.Serializer):
                 Consulta.objects.get(
                     dia=agenda.dia, usuario=usuario, horario__hora=data['horario'])
                 raise ValidationError(
-                    {'consulta': 'Você ja possui uma cunsulta marcada para este dia e horario'})
+                    {'message': 'Você ja possui uma cunsulta marcada para este dia e horario'})
             except ObjectDoesNotExist:
-                raise None
+                return
         validate_hora(data)
         validate_dia(data)
-
         return data
 
     def save(self):

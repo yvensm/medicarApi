@@ -22,7 +22,7 @@ class Agenda(models.Model):
     def clean(self) -> None:
         if self.dia < date.today():
             raise ValidationError(
-                {'dia': "Não foi possivel criar agenda para esse dia."})
+                {'message': "Não foi possivel criar agenda para esse dia."})
         return super().clean()
 
 
@@ -43,8 +43,8 @@ class Horario(models.Model):
     def clean(self) -> None:
         if(self.agendado):
             raise ValidationError(
-                {'hora': "Horário já agendado"})
+                {'message': "Horário já agendado"})
         if (self.agenda.dia == date.today() and self.hora < datetime.now().time()):
             raise ValidationError(
-                {'hora': "Esse horário não pode ser criado"})
+                {'message': "Esse horário não pode ser criado"})
         return super().clean()
