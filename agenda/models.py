@@ -41,6 +41,9 @@ class Horario(models.Model):
         return self.hora.strftime('%H:%M')
 
     def clean(self) -> None:
+        if(self.agendado):
+            raise ValidationError(
+                {'hora': "Horário já agendado"})
         if (self.agenda.dia == date.today() and self.hora < datetime.now().time()):
             raise ValidationError(
                 {'hora': "Esse horário não pode ser criado"})
