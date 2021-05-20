@@ -14,7 +14,7 @@ class ConsultaViewSet(viewsets.ModelViewSet):
 
     def list(self, request):
         data = Consulta.objects.filter(
-            usuario__username=request.user,horario__hora=).order_by('dia')
+            usuario__username=request.user).order_by('dia')
         serializer = ConsultaListSerializer(data, many=True)
         return Response(serializer.data)
 
